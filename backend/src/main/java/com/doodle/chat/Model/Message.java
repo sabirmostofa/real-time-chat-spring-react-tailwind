@@ -29,13 +29,16 @@ public class Message {
 
     @NonNull
     private String sender;
+    @NonNull
+    private String senderId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd LLL yyyy HH:mm:ss")
     private LocalDateTime timestamp;
 
-    public Message(String message, String sender, LocalDateTime timestamp) {
+    public Message(String message, String sender, String senderId, LocalDateTime timestamp) {
         this.message = message;
         this.sender = sender;
+        this.senderId = sender;
         this.timestamp = timestamp;
     }
 }

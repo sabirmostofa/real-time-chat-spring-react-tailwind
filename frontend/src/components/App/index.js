@@ -1,16 +1,16 @@
-import { React, useEffect, useState } from "react";
+import { React, useState } from "react";
 
 import "./App.css";
 import Register from "../Register";
 import Chatbox from "../Chatbox";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   const [userData, setUserData] = useState({
+    userId: null,
     name: "",
     connected: false,
   });
-
-  //fetch saved messages from API
 
   const registerUser = () => {
     setUserData({ ...userData, connected: true });
@@ -18,7 +18,8 @@ function App() {
 
   const handleUser = (event) => {
     const { value } = event.target;
-    setUserData({ ...userData, name: value });
+    const uuid = uuidv4();
+    setUserData({ ...userData, name: value, userId: uuid });
   };
 
   return userData.connected ? (

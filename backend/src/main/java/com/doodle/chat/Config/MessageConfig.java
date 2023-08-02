@@ -24,9 +24,9 @@ public class MessageConfig {
     @Bean
     CommandLineRunner commandLineRunner(MessageRepository repo) {
         return args -> {
-            Message msgSabir = new Message("Hello from Sabir", "Sabir", LocalDateTime.now());
-            Message msgDoodle = new Message("Hello from Doodle", "DoodleTest", LocalDateTime.now());
-            Message msgRandom = new Message("Hello from Random", "Random", LocalDateTime.now());
+            Message msgSabir = new Message("Hello from Sabir", "Sabir", "1690975306894", LocalDateTime.now());
+            Message msgDoodle = new Message("Hello from Doodle", "DoodleTest", "1690975306812", LocalDateTime.now());
+            Message msgRandom = new Message("Hello from Random", "Random", "1690975306894", LocalDateTime.now());
             repo.saveAll(List.of(msgSabir, msgDoodle, msgRandom));
         };
     }

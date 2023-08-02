@@ -14,14 +14,16 @@ export default function Chatbox({ userData }) {
   const connect = () => {
     let socket = new SockJS("/chat");
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, onConnected, onError);
+    stompClient.connect({ "client-id": userData.userId }, onConnected, onError);
   };
 
   const onConnected = (connetion) => {
     console.log("Connected!");
     console.log(connetion);
     setConnected(true);
-    stompClient.subscribe("/topic/messages", onMessageReceived);
+    stompClient.subscribe("/topic/messages", onMessageReceived, {
+      id: userData.userId,
+    });
   };
 
   const onError = (err) => {
@@ -30,6 +32,7 @@ export default function Chatbox({ userData }) {
   };
 
   const onMessageReceived = (payload) => {
+    console.log("userID ", userData.userId);
     console.log(payload);
     let message = JSON.parse(payload.body);
     setRealTimeMessages((messages) => [...messages, message]);
@@ -44,7 +47,11 @@ export default function Chatbox({ userData }) {
         stompClient.send(
           "/app/sendmessage",
           {},
-          JSON.stringify({ message: msg, sender: userData.name })
+          JSON.stringify({
+            message: msg,
+            sender: userData.name,
+            senderId: userData.userId,
+          })
         );
         setMsg("");
       }
@@ -91,8 +98,18 @@ export default function Chatbox({ userData }) {
         ))}
         {realTimeMessages.map((msg) => (
           <div className="chat chat-start">
-            <div className="chat-header">{msg.sender}</div>
-            <div className="chat-bubble">{msg.message}</div>
+            <div className="chat-header">
+              {msg.senderId === userData.userId ? "You" : msg.sender}
+            </div>
+            <div
+              className={
+                msg.senderId === userData.userId
+                  ? "chat-bubble chat-bubble-primary"
+                  : "chat-bubble"
+              }
+            >
+              {msg.message}
+            </div>
 
             <div className="chat-footer text-xs">{msg.timestamp}</div>
           </div>
