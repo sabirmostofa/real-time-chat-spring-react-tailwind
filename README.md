@@ -10,7 +10,7 @@ Build command with: `docker-compose up --build`
 
 Run from: `http://localhost:3000`
 
-**_Two ports need to be available.8090 is used for backend and 3000 for frontend_**
+**_Two ports are required to be available. 8090 is used for backend and 3000 for frontend_**
 
 ## Services in docker
 
