@@ -1,18 +1,24 @@
 # real-time-chat-spring-react-tailwind
 
-## Environment
+## Run the app with docker images from dockerhub
 
-JDK20, npm, docker are required to run the app
+From the project directory: `docker-compose -f .\docker-compose-dockerhub.yml up`
 
-## Build and run
+**_Three ports are required to be available. 8090 is used for backend, 5432 for postgresql and 3000 for frontend_**
 
-Build command with: `docker-compose up --build`
+### Building environment(If you want to build the app locally )
+
+JDK20, gradle, npm, docker are required to build and run the app
+
+### Build and run
+
+- Build .jar from the backend folder: `.\gradle bootjar`
+
+- Run the app with command : `docker-compose up --build`
 
 Run from: `http://localhost:3000`
 
-**_Two ports are required to be available. 8090 is used for backend and 3000 for frontend_**
-
-## Services in docker
+### Services in docker
 
 3 Services:
 
@@ -20,16 +26,16 @@ Run from: `http://localhost:3000`
 - Fronted with React, Tailwind, daisy
 - Postgresql
 
-## Frameworks, Libs :
+### Frameworks, Libs :
 
 Spring boot with websocket, JPA for backend, React, Tailwind with daisy , StompJs, SockJs, uuid for user IDs
 
-## TODO
+### TODO
 
 - Unit Test, Integration tests
 - fix warnings in react
 
-## Demo
+### Demo
 
 https://youtu.be/ayeV6obpiys
 [![](https://youtu.be/ayeV6obpiys)](https://youtu.be/ayeV6obpiys)

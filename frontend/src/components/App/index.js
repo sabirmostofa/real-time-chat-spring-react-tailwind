@@ -12,7 +12,8 @@ function App() {
     connected: false,
   });
 
-  const registerUser = () => {
+  const registerUser = (e) => {
+    e.preventDefault();
     setUserData({ ...userData, connected: true });
   };
 

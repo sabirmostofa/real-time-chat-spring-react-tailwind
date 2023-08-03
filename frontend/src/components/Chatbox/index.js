@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 
-let stompClient = null;
+var stompClient = null;
 export default function Chatbox({ userData }) {
   const [msg, setMsg] = useState("");
   const [messages, setMessages] = useState([]);
@@ -11,10 +11,11 @@ export default function Chatbox({ userData }) {
   const [connected, setConnected] = useState(false);
   const endRef = useRef();
 
-  const connect = () => {
-    let socket = new SockJS("/chat");
-    stompClient = Stomp.over(socket);
-    stompClient.connect({ "client-id": userData.userId }, onConnected, onError);
+  const onMessageReceived = (payload) => {
+    console.log("userID ", userData.userId);
+    console.log(payload);
+    let message = JSON.parse(payload.body);
+    setRealTimeMessages((messages) => [...messages, message]);
   };
 
   const onConnected = (connetion) => {
@@ -30,12 +31,10 @@ export default function Chatbox({ userData }) {
     console.log("Could not connect:", err);
     setErrorText("couldn't connect to the chat websocket, check console!");
   };
-
-  const onMessageReceived = (payload) => {
-    console.log("userID ", userData.userId);
-    console.log(payload);
-    let message = JSON.parse(payload.body);
-    setRealTimeMessages((messages) => [...messages, message]);
+  const connect = () => {
+    let socket = new SockJS("/chat");
+    stompClient = Stomp.over(socket);
+    stompClient.connect({ "client-id": userData.userId }, onConnected, onError);
   };
 
   const sendMessage = (event) => {
@@ -62,7 +61,7 @@ export default function Chatbox({ userData }) {
   };
 
   const fetchMessages = () => {
-    fetch("/api/messages/recent?limit=10")
+    fetch("/api/messages/recent?limit=20")
       .then((response) => {
         return response.json();
       })
@@ -83,13 +82,13 @@ export default function Chatbox({ userData }) {
   }, []);
 
   return (
-    <div className="mx-auto border rounded-md shadow-sm max-w-md mt-4 h-screen">
+    <div className="mx-auto  border rounded-md shadow-sm max-w-md mt5vh screen75">
       {errorText.length > 0 && (
         <div className="bg-error display">{errorText}</div>
       )}
-      <div className="h-3/4 overflow-y-auto">
+      <div className="h-full overflow-y-auto mst">
         {messages.map((msg) => (
-          <div className="chat chat-start">
+          <div className="chat chat-start" key={msg.id}>
             <div className="chat-header">{msg.sender}</div>
             <div className="chat-bubble">{msg.message}</div>
 
@@ -97,7 +96,7 @@ export default function Chatbox({ userData }) {
           </div>
         ))}
         {realTimeMessages.map((msg) => (
-          <div className="chat chat-start">
+          <div className="chat chat-start" key={msg.id}>
             <div className="chat-header">
               {msg.senderId === userData.userId ? "You" : msg.sender}
             </div>
@@ -119,13 +118,18 @@ export default function Chatbox({ userData }) {
       </div>
 
       {/*  end of all chats  start of send*/}
-      <div className="bg-gray-200  bottom-0 shadow-lg py-10">
-        <form className="flex" onSubmit={sendMessage} method="POST" action="#">
+      <div className="  bottom-0 shadow-lg py-5">
+        <form
+          className="flex mt-0 p-0 align-middle"
+          onSubmit={sendMessage}
+          method="POST"
+          action="#"
+        >
           <input
             type="text"
             onChange={(event) => setMsg(event.target.value)}
             value={msg}
-            className="input w-full focus:outline-none bg-gray-100"
+            className="input input-md  w-full focus:outline-none bg-gray-100"
           />
           <button
             type="submit"
